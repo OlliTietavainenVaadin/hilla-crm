@@ -9,8 +9,11 @@ import dev.hilla.BrowserCallable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AnonymousAllowed
 @BrowserCallable
@@ -36,7 +39,9 @@ public class CRMService {
             @Email
             String email,
             @NotNull
-            CompanyRecord company
+            CompanyRecord company,
+            @NotNull
+            String status
     ) {
     }
 
@@ -47,7 +52,6 @@ public class CRMService {
     ) {
     }
 
-
     private ContactRecord toContactRecord(Contact c) {
         return new ContactRecord(
                 c.getId(),
@@ -57,7 +61,8 @@ public class CRMService {
                 new CompanyRecord(
                         c.getCompany().getId(),
                         c.getCompany().getName()
-                )
+                ),
+                c.getId() % 2 == 0 ? "Success" : "Error"
         );
     }
 
@@ -69,8 +74,9 @@ public class CRMService {
     }
 
     public List<CompanyRecord> findAllCompanies() {
-        return companyRepository.findAll().stream()
+        List<CompanyRecord> list = companyRepository.findAll().stream()
                 .map(this::toCompanyRecord).toList();
+        return list;
     }
 
     public List<ContactRecord> findAllContacts() {
@@ -91,6 +97,20 @@ public class CRMService {
         var saved = contactRepository.save(dbContact);
 
         return toContactRecord(saved);
+    }
+
+    public record PageResponse(List<CRMService.ContactRecord> items, long totalCount) { }
+
+    public PageResponse fetchContacts(int page, int pageSize, String searchTerm) {
+        PageResponse res = null;
+        if (searchTerm == null || "".equals(searchTerm)) {
+            Page<Contact> all = contactRepository.findAll(PageRequest.of(page, pageSize));
+            res = new PageResponse(all.getContent().stream().map(this::toContactRecord).collect(Collectors.toList()), all.getTotalElements());
+        } else {
+            Page<Contact> c = contactRepository.findByFirstNameContaining(searchTerm, PageRequest.of(page, pageSize));
+            res = new PageResponse(c.getContent().stream().map(this::toContactRecord).collect(Collectors.toList()), c.getTotalElements());
+        }
+        return res;
     }
 
 }

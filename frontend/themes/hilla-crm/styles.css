@@ -1,0 +1,26 @@
+@import "theme-editor.css";
+.success {
+    background: aquamarine;
+    padding: 2px 1px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+.error {
+    background: coral;
+    padding: 2px 1px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+vaadin-grid::part(success) {
+    background-color: var(--lumo-success-color-10pct);
+}
+
+vaadin-grid::part(error) {
+    background-color: var(--lumo-error-color-10pct);
+}
+
+vaadin-grid::part(font-weight-bold) {
+    font-weight: bold;
+}
