@@ -1,8 +1,7 @@
 package com.example.application.data;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +14,10 @@ public class Company extends AbstractEntity {
     @OneToMany(mappedBy = "company")
     @Nullable
     private List<Contact> employees = new LinkedList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parnt")
+    private Company parnt;
 
     public String getName() {
         return name;
@@ -30,5 +33,9 @@ public class Company extends AbstractEntity {
 
     public void setEmployees(List<Contact> employees) {
         this.employees = employees;
+    }
+
+    public Long getParentId() {
+        return parnt == null ? null : parnt.getId();
     }
 }

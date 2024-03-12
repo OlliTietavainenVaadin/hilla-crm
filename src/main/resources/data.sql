@@ -1,15 +1,22 @@
-INSERT INTO "COMPANY" (ID, VERSION, NAME) VALUES
-(6, 1, 'Phillips Van Heusen Corp.'),
-(7, 1, 'Avaya Inc.'),
-(8, 1, 'Laboratory Corporation of America Holdings'),
-(9, 1, 'AutoZone, Inc.'),
-(10, 1, 'Linens ''n Things Inc.');   
+INSERT INTO "COMPANY" (ID, VERSION, PARNT, NAME) VALUES
+(6, 1, null, 'Phillips Van Heusen Corp.'),
+(7, 1, null, 'Avaya Inc.'),
+(8, 1, null, 'Laboratory Corporation of America Holdings'),
+(9, 1, null, 'AutoZone, Inc.'),
+(10, 1, null, 'Echoing River Tech'),
+(11, 1, null, 'Brilliant Bloom Bakery'),
+(12, 1, null, 'Swift Sparrow Delivery'),
+(13, 1, null, 'Starlight Inc.'),
+(14, 1, 13, 'Starlight Symphony Media'),
+(15, 1, 13, 'Starlight Fitness'),
+(16, 1, 13, 'Starlight Sparkling Sea Studios'),
+(17, 1, null, 'Linens ''n Things Inc.');
 INSERT INTO "CONTACT" (ID, VERSION, EMAIL,FIRST_NAME,LAST_NAME,COMPANY_ID) VALUES
 (11, 1, 'eula.lane@jigrormo.ye', 'Eula', 'Lane', 8),
 (12, 1, 'barry.rodriquez@zun.mm', 'Barry', 'Rodriquez', 7),
 (13, 1, 'eugenia.selvi@capfad.vn', 'Eugenia', 'Selvi', 6),
 (14, 1, 'alejandro.miles@dec.bn', 'Alejandro', 'Miles', 10),
-(15, 1, 'cora.tesi@bivo.yt', 'Cora', 'Tesi', 6),
+(15, 1, 'cora.tesi@bivo.yt', 'Cora', 'Tessi', 6),
 (16, 1, 'marguerite.ishii@judbilo.gn', 'Marguerite', 'Ishii', 10),
 (17, 1, 'mildred.jacobs@joraf.wf', 'Mildred', 'Jacobs', 8),
 (18, 1, 'gene.goodman@kem.tl', 'Gene', 'Goodman', 8),
@@ -55,4 +62,5 @@ INSERT INTO "CONTACT" (ID, VERSION, EMAIL,FIRST_NAME,LAST_NAME,COMPANY_ID) VALUE
 (57, 1, 'mattie.graham@ispaviw.gt', 'Mattie', 'Graham', 7),
 (58, 1, 'bryan.shaw@ha.ee', 'Bryan', 'Shaw', 9),
 (59, 1, 'essie.adams@iliat.cw', 'Essie', 'Adams', 8),
-(60, 1, 'gary.osborne@do.ga', 'Gary', 'Osborne', 7);
+(60, 1, 'gary.osborne@do.ga', 'Gary', 'Osborne', 7),
+(61, 1, 'garry.hosborne@do.ga', 'Garry', 'Hosborne', 6);

@@ -6,6 +6,7 @@ import com.example.application.data.Contact;
 import com.example.application.data.ContactRepository;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
+import dev.hilla.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -48,9 +49,11 @@ public class CRMService {
     public record CompanyRecord(
             @NotNull
             Long id,
-            String name
-    ) {
-    }
+            String name,
+            @Nullable
+            Long parentId,
+            boolean hasChildren
+    ) { }
 
     private ContactRecord toContactRecord(Contact c) {
         return new ContactRecord(
@@ -60,23 +63,44 @@ public class CRMService {
                 c.getEmail(),
                 new CompanyRecord(
                         c.getCompany().getId(),
-                        c.getCompany().getName()
+                        c.getCompany().getName(),
+                        c.getCompany().getParentId(),
+                        false
                 ),
                 c.getId() % 2 == 0 ? "Success" : "Error"
         );
     }
 
     private CompanyRecord toCompanyRecord(Company c) {
+        boolean hasChildren = companyRepository.findAllChildCompanies(c.getId()).size() > 0;
         return new CompanyRecord(
                 c.getId(),
-                c.getName()
+                c.getName(),
+                c.getParentId(),
+                hasChildren
         );
     }
 
     public List<CompanyRecord> findAllCompanies() {
-        List<CompanyRecord> list = companyRepository.findAll().stream()
+        List<CompanyRecord> list = companyRepository.findAllParentCompanies().stream()
                 .map(this::toCompanyRecord).toList();
         return list;
+    }
+
+    public record CompanyResult(List<CRMService.CompanyRecord> items, long hierarchyLevelSize) { }
+    public CompanyResult findChildCompanies(
+            int page, int pageSize, @Nullable Long parentId) {
+        if (parentId == null) {
+            List<CompanyRecord> list =
+                    companyRepository.findAllParentCompanies().stream()
+                    .map(this::toCompanyRecord).toList();
+            return new CompanyResult(list, list.size());
+        }
+        List<CompanyRecord> list = companyRepository
+                .findAllChildCompanies(parentId).stream()
+                .skip(page).limit(pageSize)
+                .map(this::toCompanyRecord).toList();
+        return new CompanyResult(list, list.size());
     }
 
     public List<ContactRecord> findAllContacts() {
