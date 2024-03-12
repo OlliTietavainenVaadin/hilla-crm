@@ -9,9 +9,6 @@ import {findChildCompanies} from "Frontend/generated/CRMService";
 
 export default function CompanyView() {
 
-    const expandThese = useMemo(() => {
-        return [];
-    }, []);
     const treeDataProvider = useMemo(
         () =>
             async (
@@ -23,7 +20,6 @@ export default function CompanyView() {
                     params.pageSize,
                     params.parentItem ? params.parentItem.id : undefined
                 );
-
                 callback(items, hierarchyLevelSize);
             },
         []
@@ -33,7 +29,6 @@ export default function CompanyView() {
         <h2>Companies</h2>
 
         <Grid
-              expandedItems={expandThese}
               dataProvider={treeDataProvider}
               itemHasChildrenPath="hasChildren">
             <GridTreeColumn path="id"/>
